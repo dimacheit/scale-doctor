@@ -1082,23 +1082,25 @@ textarea:focus-visible {
       //-----------------------------------  animation - mobile
       matchMedia.add("(max-width: 991px)", () => {
         isDesktop = false;
-        heroSectionTrigger = gsap.fromTo(bgMain,
-                {
-                  scale: 1,
-                  yPercent: 28,
-                  transformOrigin: 'center center'
-                },
-                {
-                  scale: 1.3,
-                  yPercent: 0,
-                  scrollTrigger: {
-                    trigger: sectionHero,
-                    start: '0% 0%',
-                    end: '70% 0%',
-                    scrub: 0.5,
-                    //markers: true,
-                  },
-                })
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionHero,
+            start: 'top top',
+            end: '100% top',
+            pin: true,
+            scrub: true,
+          }
+        }).to(heroContent, {
+          yPercent: -100
+        }, "start").fromTo(bgMain, {
+          scale: 1.25,
+          yPercent: 15,
+          transformOrigin: 'center center'
+        }, {
+          scale: 1.25,
+          yPercent: 0,
+        }, "start");
 
         gsap.timeline({
           scrollTrigger: {
@@ -1107,7 +1109,6 @@ textarea:focus-visible {
             end: 'bottom bottom',
             scrub: true,
             markers: true,
-            force3D: true,
             onUpdate: (self) => {
               if (self.progress > 0.5 && self.progress < 1) {
                 document.querySelector('.section_a1c').classList.add('visible');
@@ -1117,22 +1118,83 @@ textarea:focus-visible {
             }
           }
         }).to(bgMain, {
-          scale: 9,
-          xPercent: 178,
-          yPercent: 317,
-          zPercent: 0.01,
-          force3D: true,
-          transformOrigin: 'center bottom'
-        }, "start").to('.img-device', {
-          xPercent: -67,
-          force3D: true,
-        }, "start").to('.img-vial', {
-          xPercent: 120,
-          force3D: true,
-        }, "start").to('.img-doctor', {
-          xPercent: 24,
-          force3D: true,
+          scale: 15,
+          xPercent: 350,
+          yPercent: -50,
         }, "start");
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '.section_glucose',
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: true,
+            onEnterBack: () => document.querySelector('.section-popup-1').classList.remove('visible'),
+            onUpdate: (self) => {
+              if (self.progress > 0.5 && self.progress < 1) {
+                document.querySelector('.section_glucose').classList.add('visible');
+              } else {
+                document.querySelector('.section_glucose').classList.remove('visible');
+              }
+            }
+          }
+        }).to(bgMain, {
+          scale: 15,
+          xPercent: 400,
+          yPercent: -50,
+        }, "start");
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '.section-popup-1',
+            start: 'top bottom',
+            end: 'center center',
+            scrub: true,
+            force3D: true,
+            onEnter: () => document.querySelector('.section-popup-1').classList.remove('visible'),
+            onEnterBack: () => document.querySelector('.section-popup-1').classList.add('visible'),
+            onUpdate: (self) => {
+              console.log(self.progress)
+              if (self.progress === 1) {
+                document.querySelector('.section-popup-1').classList.add('visible');
+              } else if(self.progress < 0.8) {
+                document.querySelector('.section-popup-1').classList.remove('visible');
+              }
+            }
+          }
+        }).to(bgMain, {
+          scale: 1,
+          xPercent: 0,
+          yPercent: 0,
+        }, "start");
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: '.section_guideline',
+            start: 'top bottom',
+            end: 'bottom bottom',
+            scrub: true,
+            force3D: true,
+            onEnter: () => document.querySelector('.section-popup-1').classList.remove('visible'),
+            onUpdate: (self) => {
+              if (self.progress > 0.5 && self.progress < 1) {
+                document.querySelector('.section_guideline').classList.add('visible');
+              } else {
+                document.querySelector('.section_guideline').classList.remove('visible');
+              }
+            }
+          }
+        }).to(bgMain, {
+          scale: 5.2,
+          xPercent: 115,
+          yPercent: 40,
+        }, "start").to('.img-doctor', {
+          xPercent: 30,
+        }, "start").to('.img-lamp', {
+          xPercent: -60,
+        }, "start");
+
+
 
         window.addEventListener("resize", ()  => {
           ScrollTrigger.refresh()
@@ -1143,6 +1205,14 @@ textarea:focus-visible {
     });
 
   </script>
+
+  <style>
+    @media (max-width: 991px) {
+      .section-hero {
+        height: 200vh;
+      }
+    }
+  </style>
 
 
 </body>
